@@ -1,23 +1,3 @@
-#INSTRUCTIONS:
-#Between each guess, the board should be redrawn to the terminal output (Ascii art!).
-#The letters that have already been guessed should be displayed before each time the player guesses.
-#Use the colorize gem to make each piece of the hangman a different color.
-#Use classes for each different idea represented in the game
-#Place the application flow/logic in a method outside of any class, call this method at the end of the file to start the game.
-
-#IDEAS OF HOW IT MIGHT RUN STEP-BY-STEP
-#how to set it up:
-#see an empty scaffold
-#spaces representing the letters appear (maybe this should be in the array of correctly
-#guessed letters. once the correct letter is called, then the correct replaces the _".
-#if the letter from the word is not called, then a new body part appears on the scaffold.
-#all guessed letters should appear on the screen under "guesses". maybe these guessed
-#letters should be sorted in an array, and new guesses can be added to this array.
-#if a letter from the word is called, then the letter appears where the space is
-#if the letter from the word is called, then the body remains the same as it was before
-#once the body is complete (after 6 wrong guesses), then the game is over
-#once the word is complete, then the game is over
-
 require "colorize"
 
 #the actual stick figure
@@ -26,61 +6,74 @@ class Hangman
   attr_accessor :word, :guess
 
   def initialize
-    @word = word
-    @guess = guess
+    @head = "(-_-)".cyan
+    @left_arm = "/".red
+    @right_arm = "\\".blue
+    @body = "O".green
+    @left_leg = ",|".yellow
+    @right_leg = "|,".magenta
   end
 
   def hang
-    puts "nothing here yet :-)"
+    puts " ==========                                     "
+    puts " |        |                                     "
+    puts " |      #{@head}                                "
+    puts " |       #{@left_arm}#{@body}#{@right_arm}      "
+    puts " |       #{@left_leg}#{@right_leg}              "
+    puts " |                                              "
+    puts "=====                                           "
   end
 
 end
 
 #the word. right now: "braggadocio"
 class Word
-  attr_accessor :word, :guess, :filling_lines
+  attr_accessor :word, :guess, :fill
 
   def initialize(word)
     @word = word
     @guess = guess
-    @filling_lines = spaces
+    @fill = Array.new(word.length, "x")
+    @all_guesses = []
+  end
+
+  def fill
+    @fill
   end
 
   def ask_guess
     puts "Can you guess my word? It's pretty hard."
     puts "Guess a letter."
     @guess = gets.chomp
-    test
+    make_guess
   end
 
-  def test
-    if word.include?@guess
-      check_the_guess
+  def make_guess
+    return false if @all_guesses.include?(@guess)
+    @all_guesses << @guess
+    if @word.include?guess
+      word_array = @word.split(//)
+      letter_index = word_array.index(@guess)
+      @fill[letter_index] = @guess
+    else wrong_letters
+    end
+  end
+
+  def show_guess
+    puts @fill.join
+  end
+
+  def wrong_letters
+    @all_guesses << @guess
+    wrong_letter_situations = 0
+    wrong_letter_situations += 1
+    if wrong_letter_situations < 6
+      puts "Sorry, that letter is not in the word. Try again!"
+      @guess = gets.chomp
+      make_guess
     else
-      puts "Your letter is not here."
-      wrong_words
+      abort("Sorry you made too many guesses. This game is over.")
     end
-  end
-
-  def spaces
-    Array.new(word.length, "*")
-  end
-
-
-  def check_the_guess
-    word_array = @word.split(//)
-    word_array.each_with_index do |letter, index|
-      if @guess == letter
-        @filling_lines[index] == letter
-      end
-    end
-  end
-
-  def guessed_spot
-    @filling_lines.join
-  end
-
-  def wrong_words
   end
 
 end
@@ -106,15 +99,13 @@ puts "bringing back blink text for maximum discomfort".center(50)
 puts "                ▄ ▄ ▄ ▄ ▄ ▄ ▄ ▄ ▄ ▄ ▄ ▄
 ░ ░ ░ ░ ░ ░ ░ ░ ░ ░ ░ ░
                       ▄ ▄ ▄ ▄ ▄ ▄ ▄ ▄ ▄ ▄ ▄ ▄".underline
+
 while
+
 my_word = Word.new("braggadocio")
-
 hanging = Hangman.new
-
-  hanging.hang
-
-  my_word.guessed_spot
-
-  my_word.ask_guess
+hanging.hang
+my_word.ask_guess
+my_word.show_guess
 
 end
