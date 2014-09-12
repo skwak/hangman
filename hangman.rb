@@ -35,6 +35,8 @@ class Word
     @guess = guess
     @fill = Array.new(word.length, "x")
     @all_guesses = []
+    @wrong_letter_situations = 0
+    @possible_win = true
   end
 
   def fill
@@ -49,13 +51,14 @@ class Word
   end
 
   def make_guess
-    return false if @all_guesses.include?(@guess)
-    @all_guesses << @guess
-    if @word.include?guess
+    if @word.include?@guess
+      @all_guesses << @guess
       word_array = @word.split(//)
       letter_index = word_array.index(@guess)
       @fill[letter_index] = @guess
-    else wrong_letters
+    else
+      @all_guesses << @guess
+      wrong_letters
     end
   end
 
@@ -64,15 +67,29 @@ class Word
   end
 
   def wrong_letters
-    @all_guesses << @guess
-    wrong_letter_situations = 0
-    wrong_letter_situations += 1
-    if wrong_letter_situations < 6
+    @wrong_letter_situations += 1
+    if @wrong_letter_situations < 6
       puts "Sorry, that letter is not in the word. Try again!"
-      @guess = gets.chomp
-      make_guess
+      ask_guess
     else
       abort("Sorry you made too many guesses. This game is over.")
+      @possible_win == false
+    end
+  end
+
+  def show_status
+    puts "You've used these letters so far: #{@all_guesses}"
+    puts "You have made #{@wrong_letter_situations} wrong guesses so far! You can
+    be wrong only 6 times."
+  end
+
+  def play
+    hanging = Hangman.new
+    hanging.hang
+    while @possible_win
+      ask_guess
+      show_guess
+      show_status
     end
   end
 
@@ -100,12 +117,6 @@ puts "                ▄ ▄ ▄ ▄ ▄ ▄ ▄ ▄ ▄ ▄ ▄ ▄
 ░ ░ ░ ░ ░ ░ ░ ░ ░ ░ ░ ░
                       ▄ ▄ ▄ ▄ ▄ ▄ ▄ ▄ ▄ ▄ ▄ ▄".underline
 
-while
 
-my_word = Word.new("braggadocio")
-hanging = Hangman.new
-hanging.hang
-my_word.ask_guess
-my_word.show_guess
-
-end
+my_word = Word.new("labryinth")
+my_word.play
