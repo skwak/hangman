@@ -6,7 +6,7 @@ class Hangman
   def initialize(word)
     @word = word
     @guess = guess
-    @fill = Array.new(word.length, "x")
+    @fill = Array.new(word.length, "-")
     @all_guesses = []
     @wrong_letter_situations = 0
     @possible_win = true
@@ -41,9 +41,16 @@ class Hangman
   def make_guess
     if @word.include?@guess
       @all_guesses << @guess
+      # only works if the word contains only unique letters:
+      # word_array = @word.split(//)
+      # letter_index = word_array.index(@guess)
+      # @fill[letter_index] = @guess
       word_array = @word.split(//)
-      letter_index = word_array.index(@guess)
-      @fill[letter_index] = @guess
+      word_array.each_with_index do |letter, index|
+        if @guess == letter
+          @fill[index] = letter
+        end
+      end
       abort("You won! Congratulamations. You are smart or you are having a good day.") if @fill.join == @word
     else
       @all_guesses << @guess
@@ -61,16 +68,22 @@ class Hangman
     case @wrong_letter_situations
     when 1
       @head << "(-_-)".cyan
+      show_guess
     when 2
       @body << "|".green
+      show_guess
     when 3
       @left_arm << "/".red
+      show_guess
     when 4
       @right_arm << "\\".blue
+      show_guess
     when 5
       @left_leg << "_/".yellow
+      show_guess
     when 6
       @right_leg << "\\_".magenta
+      show_guess
       show_status
       abort("Sorry you made too many guesses. This game is over.")
       @possible_win == false
@@ -120,5 +133,5 @@ puts "                ▄ ▄ ▄ ▄ ▄ ▄ ▄ ▄ ▄ ▄ ▄ ▄
                       ▄ ▄ ▄ ▄ ▄ ▄ ▄ ▄ ▄ ▄ ▄ ▄".underline
 
 
-my_word = Hangman.new("labryinth")
+my_word = Hangman.new("braggadocio")
 my_word.play
