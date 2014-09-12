@@ -58,7 +58,6 @@ class Hangman
     end
   end
 
-
   def show_guess
     puts @fill.join
   end
@@ -145,6 +144,6 @@ puts "                ▄ ▄ ▄ ▄ ▄ ▄ ▄ ▄ ▄ ▄ ▄ ▄
 ░ ░ ░ ░ ░ ░ ░ ░ ░ ░ ░ ░
                       ▄ ▄ ▄ ▄ ▄ ▄ ▄ ▄ ▄ ▄ ▄ ▄".underline
 
-choose_word_array = ["braggadocio", "parantheses", "hype", "sliver", "raucous"]
+choose_word_array = ["braggadocio", "parantheses", "hype", "sliver", "raucous", "ambient", "raccoon"]
 my_word = Hangman.new(choose_word_array.sample)
 my_word.play
