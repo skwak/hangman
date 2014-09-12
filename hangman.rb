@@ -6,7 +6,7 @@ class Hangman
   def initialize(word)
     @word = word
     @guess = guess
-    @fill = Array.new(word.length, "-")
+    @fill = Array.new(word.length, "#")
     @all_guesses = []
     @wrong_letter_situations = 0
     @possible_win = true
@@ -51,12 +51,13 @@ class Hangman
           @fill[index] = letter
         end
       end
-      abort("You won! Congratulamations. You are smart or you are having a good day.") if @fill.join == @word
+      try_again if @fill.join == @word
     else
       @all_guesses << @guess
       wrong_letters
     end
   end
+
 
   def show_guess
     puts @fill.join
@@ -85,7 +86,7 @@ class Hangman
       @right_leg << "\\_".magenta
       show_guess
       show_status
-      abort("Sorry you made too many guesses. This game is over.")
+      try_again
       @possible_win == false
     end
     show_status
@@ -99,6 +100,19 @@ class Hangman
     be wrong only 6 times."
   end
 
+  def try_again
+    show_guess
+    puts "What do you want to do?
+            1. Play again
+            2. Exit FOREVER."
+    next_try = gets.chomp
+    if next_try == "1"
+      play
+    elsif next_try == "2"
+      abort("GAME OVER.".blink)
+    end
+  end
+
   def play
     while @possible_win
       hang
@@ -107,7 +121,6 @@ class Hangman
       show_status
     end
   end
-
 end
 
 # welcome screen to be festive
@@ -132,6 +145,6 @@ puts "                ▄ ▄ ▄ ▄ ▄ ▄ ▄ ▄ ▄ ▄ ▄ ▄
 ░ ░ ░ ░ ░ ░ ░ ░ ░ ░ ░ ░
                       ▄ ▄ ▄ ▄ ▄ ▄ ▄ ▄ ▄ ▄ ▄ ▄".underline
 
-
-my_word = Hangman.new("braggadocio")
+choose_word_array = ["braggadocio", "parantheses", "hype", "sliver", "raucous"]
+my_word = Hangman.new(choose_word_array.sample)
 my_word.play
