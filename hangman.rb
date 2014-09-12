@@ -51,7 +51,9 @@ class Hangman
           @fill[index] = letter
         end
       end
-      try_again if @fill.join == @word
+      abort("YOU WON. #{@word}!".blink) if @fill.join == @word
+      # try_again if @fill.join == @word
+
     else
       @all_guesses << @guess
       wrong_letters
@@ -85,7 +87,8 @@ class Hangman
       @right_leg << "\\_".magenta
       show_guess
       show_status
-      try_again
+      abort("GAME OVER.".blink)
+      # try_again
       @possible_win == false
     end
     show_status
@@ -99,18 +102,18 @@ class Hangman
     be wrong only 6 times."
   end
 
-  def try_again
-    show_guess
-    puts "What do you want to do?
-            1. Play again
-            2. Exit FOREVER."
-    next_try = gets.chomp
-    if next_try == "1"
-      play
-    elsif next_try == "2"
-      abort("GAME OVER.".blink)
-    end
-  end
+  # def try_again
+  #   show_guess
+  #   puts "What do you want to do?
+  #           1. Play again
+  #           2. Exit FOREVER."
+  #   next_try = gets.chomp
+  #   if next_try == "1"
+  #     play
+  #   elsif next_try == "2"
+  #     abort("GAME OVER.".blink)
+  #   end
+  # end
 
   def play
     while @possible_win
@@ -144,6 +147,6 @@ puts "                ▄ ▄ ▄ ▄ ▄ ▄ ▄ ▄ ▄ ▄ ▄ ▄
 ░ ░ ░ ░ ░ ░ ░ ░ ░ ░ ░ ░
                       ▄ ▄ ▄ ▄ ▄ ▄ ▄ ▄ ▄ ▄ ▄ ▄".underline
 
-choose_word_array = ["braggadocio", "parantheses", "hype", "sliver", "raucous", "ambient", "raccoon"]
+choose_word_array = ["spectacular", "glorious", "dastardly", "stupendous"]
 my_word = Hangman.new(choose_word_array.sample)
 my_word.play
