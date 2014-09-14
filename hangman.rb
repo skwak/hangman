@@ -41,10 +41,6 @@ class Hangman
   def make_guess
     if @word.include?@guess
       @all_guesses << @guess
-      # only works if the word contains only unique letters:
-      # word_array = @word.split(//)
-      # letter_index = word_array.index(@guess)
-      # @fill[letter_index] = @guess
       word_array = @word.split(//)
       word_array.each_with_index do |letter, index|
         if @guess == letter
@@ -52,7 +48,6 @@ class Hangman
         end
       end
       abort("YOU WON. #{@word}!".blink) if @fill.join == @word
-      # try_again if @fill.join == @word
 
     else
       @all_guesses << @guess
@@ -61,7 +56,7 @@ class Hangman
   end
 
   def show_guess
-    puts @fill.join
+    puts "This is your word:" + @fill.join
   end
 
   def wrong_letters
@@ -70,25 +65,18 @@ class Hangman
     case @wrong_letter_situations
     when 1
       @head << "(-_-)".cyan
-      show_guess
     when 2
       @body << "|".green
-      show_guess
     when 3
       @left_arm << "/".red
-      show_guess
     when 4
       @right_arm << "\\".blue
-      show_guess
     when 5
       @left_leg << "_/".yellow
-      show_guess
     when 6
       @right_leg << "\\_".magenta
-      show_guess
       show_status
       abort("GAME OVER.".blink)
-      # try_again
       @possible_win == false
     end
     show_status
@@ -97,29 +85,16 @@ class Hangman
 
   def show_status
     hang
+    show_guess
     puts "You've used these letters so far: #{@all_guesses}"
     puts "You have made #{@wrong_letter_situations} wrong guess(es) so far! You can
     be wrong only 6 times."
   end
 
-  # def try_again
-  #   show_guess
-  #   puts "What do you want to do?
-  #           1. Play again
-  #           2. Exit FOREVER."
-  #   next_try = gets.chomp
-  #   if next_try == "1"
-  #     play
-  #   elsif next_try == "2"
-  #     abort("GAME OVER.".blink)
-  #   end
-  # end
-
   def play
     while @possible_win
       hang
       ask_guess
-      show_guess
       show_status
     end
   end
