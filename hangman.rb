@@ -26,6 +26,7 @@ class Hangman
     puts " |      #{@left_leg}#{@right_leg}               "
     puts " |                                              "
     puts "=====                                           "
+    show_guess
   end
 
   def fill
@@ -85,7 +86,6 @@ class Hangman
 
   def show_status
     hang
-    show_guess
     puts "You've used these letters so far: #{@all_guesses}"
     puts "You have made #{@wrong_letter_situations} wrong guess(es) so far! You can
     be wrong only 6 times."
