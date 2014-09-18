@@ -29,35 +29,34 @@ class Hangman
     show_guess
   end
 
-  def fill
-    @fill
-  end
-
   def ask_guess
     puts "Guess a letter."
     @guess = gets.chomp
     make_guess
   end
 
-  def make_guess
-    if @word.include?@guess
-      @all_guesses << @guess
-      word_array = @word.split(//)
-      word_array.each_with_index do |letter, index|
-        if @guess == letter
-          @fill[index] = letter
-        end
-      end
-      abort("YOU WON. #{@word}!".blink) if @fill.join == @word
 
+  def make_guess
+    @all_guesses << @guess
+    if @word.include?@guess
+      find_letters
+    abort("YOU WON. #{@word}!".blink) if @fill.join == @word
     else
-      @all_guesses << @guess
       wrong_letters
     end
   end
 
   def show_guess
     puts "This is your word:" + @fill.join
+  end
+
+  def find_letters
+      word_array = @word.split(//)
+      word_array.each_with_index do |letter, index|
+        if @guess == letter
+          @fill[index] = letter
+        end
+      end
   end
 
   def wrong_letters
@@ -77,7 +76,7 @@ class Hangman
     when 6
       @right_leg << "\\_".magenta
       show_status
-      abort("GAME OVER.".blink)
+      abort("GAME OVER. Your word was #{@word}".blink)
       @possible_win == false
     end
     show_status
